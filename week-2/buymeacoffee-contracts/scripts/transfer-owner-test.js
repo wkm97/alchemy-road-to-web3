@@ -7,11 +7,11 @@ async function main(){
   const owner = await hre.ethers.getSigner();
   const contractABI = abi.abi;
   const contractAddress="0x761f1Be00aC40918780099f78E0f8E81de0786Cd";
-  const transferTo = "0xF9dDc99C51E01b0F57c47168E9A24eee40d3Bb1D";
+  const transferTo = "0xC19Fde25d1483563afA7494978c09f9652Ff23Bc";
 
   const buyMeACoffee = new hre.ethers.Contract(contractAddress, contractABI, owner);
-
-  console.log("BuyMeACoffee deployed to:", buyMeACoffee.address);
+  
+  // transfer ownership to other account address
   await buyMeACoffee.connect(owner).transferOwner(transferTo);
 }
 

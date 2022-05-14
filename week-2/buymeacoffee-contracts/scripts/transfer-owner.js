@@ -4,7 +4,7 @@ const hre = require("hardhat");
 
 async function main(){
   // Get the example accounts we'll be working with.
-  const owner = await hre.ethers.getSigner();
+  const [owner, other] = await hre.ethers.getSigners();
 
   // We get the contract to deploy.
   const BuyMeACoffee = await hre.ethers.getContractFactory("BuyMeACoffee");
@@ -13,7 +13,7 @@ async function main(){
   // Deploy the contract.
   await buyMeACoffee.deployed();
   console.log("BuyMeACoffee deployed to:", buyMeACoffee.address);
-  await buyMeACoffee.connect(owner).transferOwner("0xF9dDc99C51E01b0F57c47168E9A24eee40d3Bb1D");
+  await buyMeACoffee.connect(owner).transferOwner(other.address);
 }
 
 main()
