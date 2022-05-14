@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Address 0x702F82Ad837793329ed27dA20836AaAa7D459A0f
+// Address at Rinkeby: 0x702F82Ad837793329ed27dA20836AaAa7D459A0f
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts@4.6.0/token/ERC721/ERC721.sol";
