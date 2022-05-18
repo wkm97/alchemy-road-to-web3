@@ -20,6 +20,8 @@ contract ChainBattles is ERC721URIStorage {
     Counters.Counter private _tokenIds;
 
     mapping(uint256 => Character) public tokenIdToCharacter;
+    uint256 private CLASS_SIZE = 5;
+    string[] public classes = ["Warrior", "Mage", "Summoner", "Rogue", "Archer"];
 
     struct Character {
         string name;
@@ -140,7 +142,7 @@ contract ChainBattles is ERC721URIStorage {
         _tokenIds.increment();
         uint256 newItemId = _tokenIds.current();
         _safeMint(msg.sender, newItemId);
-        Character memory newCharacter = Character(name, "Warrior", 1, randMod(10), randMod(10), randMod(10));
+        Character memory newCharacter = Character(name, classes[randMod(CLASS_SIZE)], 1, randMod(10), randMod(10), randMod(10));
         tokenIdToCharacter[newItemId] = newCharacter;
         _setTokenURI(newItemId, getTokenURI(newItemId));
     }
@@ -151,13 +153,11 @@ contract ChainBattles is ERC721URIStorage {
             ownerOf(tokenId) == msg.sender,
             "You must own this NFT to train it!"
         );
-        // TODO: level up character and buff attributes
         Character storage character = tokenIdToCharacter[tokenId];
         character.level++;
         character.agility = character.agility.add(randMod(5));
         character.strength = character.strength.add(randMod(5));
         character.intelligence = character.intelligence.add(randMod(5));
-        // tokenIdToLevels[tokenId] = currentLevel + 1;
         _setTokenURI(tokenId, getTokenURI(tokenId));
     }
 }
