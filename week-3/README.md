@@ -1,6 +1,6 @@
 ---
 title: How to Make NFTs with On-Chain Metadata - Hardhat and JavaScript
-date: 2020-05-17
+date: 2022-05-17
 reference: https://docs.alchemy.com/alchemy/road-to-web3/weekly-learning-challenges/3.-how-to-make-nfts-with-on-chain-metadata-hardhat-and-javascript
 discordMessage: https://discord.com/channels/735965332958871634/975501846863032340/975922620862173214
 ---

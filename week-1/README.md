@@ -1,6 +1,6 @@
 ---
 title: How to develop an NFT Smart Contract (ERC721) with Alchemy
-date: 2020-05-12
+date: 2022-05-12
 reference: https://docs.alchemy.com/alchemy/guides/how-to-develop-an-nft-smart-contract-erc721-with-alchemy
 ---
 
