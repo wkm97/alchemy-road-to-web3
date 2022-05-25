@@ -10,11 +10,10 @@ discordMessage: -
 - Using the Alchemy NFT API
 - NextJS framework for application
 - Tailwindcss for styling
-- Pagination for NFT API
+- React Fundamental
 
 ## Notes
--
-
+- [Pagination Component Reference](https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/)
 
 ## Exercise
 1. Create copy button for contract address for each NFT
