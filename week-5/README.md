@@ -15,6 +15,11 @@ video: https://www.youtube.com/watch?v=hNdXSMKLDi4&list=PLMj8NvODurfEYLsuiClgikZ
 - Remember to host the asset in IPFS yourself by modifying the image url in .json files.
 - VRF, request and fullfill randomness is 2 different phase.
 
+## Deploy Step
+- Deploy Bull&Bear.sol to rinkeby, parameter: 60, 0xECe365B379E1dD183B20fc5f022230C044d51404, 0x6168499c0cFfCaCD319c818142124B7A15E857ab
+- subscription_id for vrf on Bull&Bear.sol
+- safe mint
+
 ## Exercise
 Update the NFT contract code to make the following happen:
 

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
+// Rinkeby address: 0x785B8022709e2Bda088C60Aef72a83B04665D5b6
 
 pragma solidity ^0.8.0;
 
@@ -49,14 +50,14 @@ contract BullBear is ERC721, ERC721Enumerable, ERC721URIStorage, KeeperCompatibl
     // NOTE: These connect to my IPFS Companion node.
     // You should upload the contents of the /ipfs folder to your own node for development.
     string[] bullUrisIpfs = [
-        "https://ipfs.io/ipfs/QmRXyfi3oNZCubDxiVFre3kLZ8XeGt6pQsnAQRZ7akhSNs?filename=gamer_bull.json",
-        "https://ipfs.io/ipfs/QmRJVFeMrtYS2CUVUM2cHJpBV5aX2xurpnsfZxLTTQbiD3?filename=party_bull.json",
-        "https://ipfs.io/ipfs/QmdcURmN1kEEtKgnbkVJJ8hrmsSWHpZvLkRgsKKoiWvW9g?filename=simple_bull.json"
+        "https://ipfs.filebase.io/ipfs/bafkreibo6quiudzjiu5ylunygdugneeoul32jdvkpizowrbrfbrm5fxjme",
+        "https://ipfs.filebase.io/ipfs/bafkreigzyaqmwrca67hwk73yj4nogtdsj4l6t7on5apjjbjcnae2kioel4",
+        "https://ipfs.filebase.io/ipfs/bafkreigaadpfvcsykp7ils3erv2bmucn4pz7velsiizu6zvgbasmocujly"
     ];
     string[] bearUrisIpfs = [
-        "https://ipfs.io/ipfs/Qmdx9Hx7FCDZGExyjLR6vYcnutUR8KhBZBnZfAPHiUommN?filename=beanie_bear.json",
-        "https://ipfs.io/ipfs/QmTVLyTSuiKGUEmb88BgXG3qNC8YgpHZiFbjHrXKH3QHEu?filename=coolio_bear.json",
-        "https://ipfs.io/ipfs/QmbKhBXVWmwrYsTPFYfroR2N7NAekAMxHUVg2CWks7i9qj?filename=simple_bear.json"
+        "https://ipfs.filebase.io/ipfs/bafkreietaklprx6w3z2f74cahhd24n7qu7ssdomr76444oue5pvw5gwzuq",
+        "https://ipfs.filebase.io/ipfs/bafkreih35sp37az3webg2awf6it5vkczv2giebtj5vn6pdsszptawjo4ji",
+        "https://ipfs.filebase.io/ipfs/bafkreidx7bf6uamh65hzlnhhrabnsati3hem5lxgxcsm57gddqm4rs33da"
     ];
 
     event TokensUpdated(string marketTrend);
