@@ -3,6 +3,7 @@ title: Connect APIs to your Smart Contracts using Chainlink
 date: 2022-05-31
 reference: https://docs.alchemy.com/alchemy/road-to-web3/weekly-learning-challenges/5.-connect-apis-to-your-smart-contracts-using-chainlink
 video: https://www.youtube.com/watch?v=hNdXSMKLDi4&list=PLMj8NvODurfEYLsuiClgikZBGDfhwdcXF&index=7
+github: https://github.com/zeuslawyer/chainlink-dynamic-nft-alchemy
 ---
 
 # Connect APIs to your Smart Contracts using Chainlink
