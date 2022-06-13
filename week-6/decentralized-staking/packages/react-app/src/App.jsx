@@ -1,11 +1,13 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
-import { Alert, Button, Col, Menu, Row, List } from "antd";
+import { Alert, Button, Col, Menu, Row, Divider, Input, Tooltip } from "antd";
+import { SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
+import { BigNumber } from "@ethersproject/bignumber";
 import "./App.css";
 import { Account, Address, Balance, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
@@ -173,6 +175,7 @@ function App(props) {
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
+  const [stakeAmount, setStakeAmount] = useState();
 
   const logoutOfWeb3Modal = async () => {
     await web3Modal.clearCachedProvider();
@@ -252,9 +255,8 @@ function App(props) {
   );
   if (DEBUG) console.log("💵 stakerContractBalance", stakerContractBalance);
 
-  // ** keep track of total 'threshold' needed of ETH
-  const threshold = useContractReader(readContracts, "Staker", "threshold");
-  console.log("💵 threshold:", threshold);
+  const rewardRatePerSecond = useContractReader(readContracts, "Staker", "rewardRatePerSecond");
+  console.log("💵 Reward Rate:", rewardRatePerSecond);
 
   // ** keep track of a variable from the contract in the local React state:
   const balanceStaked = useContractReader(readContracts, "Staker", "balances", [address]);
@@ -264,29 +266,19 @@ function App(props) {
   const stakeEvents = useEventListener(readContracts, "Staker", "Stake", localProvider, 1);
   console.log("📟 stake events:", stakeEvents);
 
+  const receiveEvents = useEventListener(readContracts, "Staker", "Received", localProvider, 1);
+  console.log("📟 receive events:", receiveEvents);
+
   // ** keep track of a variable from the contract in the local React state:
-  const timeLeft = useContractReader(readContracts, "Staker", "timeLeft");
-  console.log("⏳ timeLeft:", timeLeft);
+  const unlockPeriodLeft = useContractReader(readContracts, "Staker", "unlockPeriodLeft");
+  console.log("⏳ Unlock Period Left:", unlockPeriodLeft);
+
+  const lockTimeLeft = useContractReader(readContracts, "Staker", "lockTimeLeft");
+  console.log("⏳ Lock Time Left:", lockTimeLeft);
 
   // ** Listen for when the contract has been 'completed'
   const complete = useContractReader(readContracts, "ExampleExternalContract", "completed");
   console.log("✅ complete:", complete);
-
-  const exampleExternalContractBalance = useBalance(
-    localProvider,
-    readContracts && readContracts.ExampleExternalContract ? readContracts.ExampleExternalContract.address : null,
-  );
-  if (DEBUG) console.log("💵 exampleExternalContractBalance", exampleExternalContractBalance);
-
-  let completeDisplay = "";
-  if (complete) {
-    completeDisplay = (
-      <div style={{ padding: 64, backgroundColor: "#eeffef", fontWeight: "bolder", color: "rgba(0, 0, 0, 0.85)" }}>
-        🚀 🎖 👩‍🚀 -- Staking App triggered `ExampleExternalContract` -- 🎉 🍾 🎊
-        <Balance balance={exampleExternalContractBalance} fontSize={64} /> ETH staked!
-      </div>
-    );
-  }
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -509,25 +501,51 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {completeDisplay}
+            {/* {completeDisplay} */}
 
-            <div style={{ padding: 8, marginTop: 32 }}>
+            <div style={{ padding: 8, marginTop: 16 }}>
               <div>Staker Contract:</div>
               <Address value={readContracts && readContracts.Staker && readContracts.Staker.address} />
             </div>
 
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Timeleft:</div>
-              {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
+            <Divider />
+
+            <div style={{ padding: 8, marginTop: 16 }}>
+              <div>Effective Interest Rate Per Second:</div>
+              <Balance
+                balance={
+                  rewardRatePerSecond
+                    ? rewardRatePerSecond.sub(BigNumber.from("0x33B2E3C9FD0803CE8000000"))
+                    : rewardRatePerSecond
+                }
+                fontSize={64}
+              />{" "}
+              ETH
             </div>
 
-            <div style={{ padding: 8 }}>
-              <div>Total staked:</div>
-              <Balance balance={stakerContractBalance} fontSize={64} />/<Balance balance={threshold} fontSize={64} />
+            <Divider />
+
+            <div style={{ padding: 8, marginTop: 16, fontWeight: "bold" }}>
+              <div>Unlock Period Left:</div>
+              {unlockPeriodLeft && humanizeDuration(unlockPeriodLeft.toNumber() * 1000)}
             </div>
 
-            <div style={{ padding: 8 }}>
-              <div>You staked:</div>
+            <div style={{ padding: 8, marginTop: 16, fontWeight: "bold" }}>
+              <div>Lock Period Left:</div>
+              {lockTimeLeft && humanizeDuration(lockTimeLeft.toNumber() * 1000)}
+            </div>
+
+            <Divider />
+
+            <div style={{ padding: 8, fontWeight: "bold" }}>
+              <div>Total Available ETH in Contract:</div>
+              <Balance balance={stakerContractBalance} fontSize={64} />
+            </div>
+
+            <Divider />
+
+            <div style={{ padding: 8, fontWeight: "bold" }}>
+              <div>ETH Locked 🔒 in Staker Contract:</div>
               <Balance balance={balanceStaked} fontSize={64} />
             </div>
 
@@ -554,14 +572,28 @@ function App(props) {
             </div>
 
             <div style={{ padding: 8 }}>
-              <Button
-                type={balanceStaked ? "success" : "primary"}
-                onClick={() => {
-                  tx(writeContracts.Staker.stake({ value: ethers.utils.parseEther("0.5") }));
+              <Input
+                size="large"
+                placeholder="Stake Amount"
+                // value={address}
+                value={stakeAmount}
+                onChange={e => {
+                  setStakeAmount(e.target.value);
                 }}
-              >
-                🥩 Stake 0.5 ether!
-              </Button>
+                suffix={
+                  <Tooltip title="Faucet: Send local ether to an address.">
+                    <Button
+                      onClick={() => {
+                        if (parseFloat(stakeAmount)) {
+                          tx(writeContracts.Staker.stake({ value: ethers.utils.parseEther(stakeAmount) }));
+                        }
+                      }}
+                      shape="circle"
+                      icon={<SendOutlined />}
+                    />
+                  </Tooltip>
+                }
+              />
             </div>
 
             {/*
@@ -569,21 +601,6 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Stake Events:</div>
-              <List
-                dataSource={stakeEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item.blockNumber}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> =>
-                      <Balance balance={item.args[1]} />
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
 
             {/* uncomment for a second contract:
             <Contract
