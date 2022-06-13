@@ -14,7 +14,9 @@ video: https://www.youtube.com/watch?v=aZRdaE8jxPk
 - Utilizing Solidity modifers
 
 ## Notes
-
+- ExampleExternalContract is used to store inactive fund, but in my exercise. There will be no inactive fund (cannot understand the idea of storing inactive fund in another contract).
+- For staking, the lock and unlock cycle can be reset using `Execute!` button.
+- The interest calculation (non-linear) is referred to [solidity-interest-help](https://github.com/wolflo/solidity-interest-helper)
 
 
 ## Exercise
